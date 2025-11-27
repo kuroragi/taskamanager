@@ -5,10 +5,11 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -16,9 +17,11 @@ class Task extends Model
         'difficulty',
         'desire',
         'obligation',
+        'energy',
         'deadline',
         'status',
         'priority_score',
+        'completed_at',
     ];
 
     protected $casts = [
@@ -27,6 +30,7 @@ class Task extends Model
         'obligation' => 'integer',
         'priority_score' => 'float',
         'deadline' => 'datetime',
+        'completed_at' => 'datetime',
     ];
 
     public const STATUS_TODO = 'todo';
@@ -34,6 +38,14 @@ class Task extends Model
     public const STATUS_DONE = 'done';
     public const STATUS_HOLD = 'hold';
     public const STATUS_DROPPED = 'dropped';
+
+    /**
+     * Scope: urutkan berdasarkan priority_score desc.
+     */
+    public function scopeOrderByPriority($query)
+    {
+        return $query->orderByDesc('priority_score');
+    }
 
     /**
      * Hitung urgency berbasis kedekatan deadline (linear awal).

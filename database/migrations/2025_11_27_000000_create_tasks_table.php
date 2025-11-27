@@ -14,14 +14,18 @@ return new class extends Migration {
             $table->unsignedTinyInteger('difficulty'); // 1-10
             $table->unsignedTinyInteger('desire');     // 1-10
             $table->unsignedTinyInteger('obligation'); // 1-10
+            $table->unsignedTinyInteger('energy')->nullable(); // optional 1-10
             $table->dateTime('deadline')->nullable();
             $table->string('status');
             $table->decimal('priority_score', 5, 2)->default(0);
+            $table->dateTime('completed_at')->nullable();
             $table->timestamps();
 
             $table->index(['status']);
             $table->index(['deadline']);
             $table->index(['priority_score']);
+            $table->index(['completed_at']);
+            $table->index(['energy']);
         });
     }
 
